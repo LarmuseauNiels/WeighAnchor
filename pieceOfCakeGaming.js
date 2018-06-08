@@ -1061,8 +1061,8 @@ class TileMap {
         for (let i = 0; i < ilength; i++) {//for each row
             let jlength = this.mapData[i].length//faster for now condsidering using reversed for loop instead
             for (let j = 0; j < jlength; j++) { //for each column of each row
-                let drawX = this.tiles[i][j].x - this.camera.cameraOffsetX;
-                let drawY = this.tiles[i][j].y - this.camera.cameraOffsetY;
+                let drawX = Math.round(this.tiles[i][j].x - this.camera.cameraOffsetX);
+                let drawY = Math.round(this.tiles[i][j].y - this.camera.cameraOffsetY);
                 if (0 < drawX < this.camera.cWidth && 0 < drawY < this.camera.cHeight) {//don't draw any tiles that will not be in the camera's view
                     ctx.save();
                     let sheetX = this.symbolImageMap[this.mapData[i][j]][0];
