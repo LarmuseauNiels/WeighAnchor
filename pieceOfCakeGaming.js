@@ -1004,10 +1004,10 @@ class Tile {
 }
 
 class TileMap {
-    contructor(scene){
+    constructor(scene){
         this.tileSheet = new Image();
         this.tiles = new Array();
-        this.symbolImageMap = new Array();
+        this.symbolImageMap = [];
         this.tileAnimations = new Array();
         this.specificTileAnimations = new Array();
         this.mapData = false;
@@ -1017,16 +1017,17 @@ class TileMap {
         this.sheetHeight = 0;
         this.camera = new Camera(scene);
     }
-    loadTileSheet(tileWidth, tileHeight, sheetWidth, sheetHeight, tileSheet, tileSymbols) {
-        this.tileSheet.src = tileSheet;
+    loadTileSheet(tileWidth, tileHeight, sheetWidth, sheetHeight, tileSheetin, tileSymbols) {
+        this.tileSheet = new Image();
+        this.tileSheet.src = tileSheetin;
         this.tileWidth = tileWidth;
         this.tileHeight = tileHeight;
         this.SheetWidth = sheetWidth;
         this.SheetHeight = sheetHeight;
         let numRows = Math.floor(this.SheetWidth / this.tileWidth);
         let numCols = Math.floor(this.SheetHeight / this.tileHeight);
-        for (i = 0; i < numRows; i++) {
-            for (j = 0; j < numCols; j++) {
+        for (let i = 0; i < numRows; i++) {
+            for (let j = 0; j < numCols; j++) {
                 if ((i * numCols) + j < tileSymbols.length) {
                     this.symbolImageMap[(i * numCols) + j] = new Array(j * this.tileWidth, i * this.tileHeight, tileSymbols[(i * numCols) + j]);
                 }
@@ -1037,10 +1038,10 @@ class TileMap {
     loadMapData(mapArray) {// mapArray must be a 2-dimensional Array
         this.mapData = new Array();
 
-        for (i = 0; i < mapArray.length; i++) {
+        for (let i = 0; i < mapArray.length; i++) {
             this.mapData.push(new Array());
             let temp = new Array();
-            for (j = 0; j < mapArray[i].length; j++) {
+            for (let j = 0; j < mapArray[i].length; j++) {
                 let k = 0;
                 let notConverted = true;
                 while (notConverted && k < this.symbolImageMap.length) {
@@ -1056,8 +1057,10 @@ class TileMap {
     drawMap() {//this could be WAY faster
         this.camera.update();
         let ctx = this.camera.context;
-        for (i = 0; i < this.mapData.length; i++) {//for each row
-            for (j = 0; j < this.mapData[i].length; j++) { //for each column of each row
+        let ilength = this.mapData.length;//faster for now condsidering using reversed for loop instead
+        for (let i = 0; i < ilength; i++) {//for each row
+            let jlength = this.mapData[i].length//faster for now condsidering using reversed for loop instead
+            for (let j = 0; j < jlength; j++) { //for each column of each row
                 let drawX = this.tiles[i][j].x - this.camera.cameraOffsetX;
                 let drawY = this.tiles[i][j].y - this.camera.cameraOffsetY;
                 if (0 < drawX < this.camera.cWidth && 0 < drawY < this.camera.cHeight) {//don't draw any tiles that will not be in the camera's view
