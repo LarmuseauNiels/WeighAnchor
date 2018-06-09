@@ -45,7 +45,7 @@ var virtKeys = false;
 
 class Sprite {
     //core class for game engine
-    constructor(scene, imageFile, width, height, x = 200,y=200) {
+    constructor(scene, imageFile, width, height, x = 400,y=300) {
         this.scene = scene;
         this.canvas = scene.canvas;
         this.context = this.canvas.getContext("2d");
@@ -939,11 +939,11 @@ class Camera {
 
     update() {
         // center the camera on the sprite
-        this.focalPointX = this.cameraOffsetX + this.cWidth / 2;
-        this.focalPointY = this.cameraOffsetY + this.cHeight / 2;
+        this.focalPointX =  this.cameraOffsetX + this.cWidth / 2;
+        this.focalPointY =  this.cameraOffsetY + this.cHeight / 2;
         if (this.target && !this.checkFocusBounds()) {
-            this.cameraOffsetX = this.target.x + (this.target.width / 2) - (this.cWidth / 2) + this.waitX;
-            this.cameraOffsetY = this.target.y + (this.target.height / 2) - (this.cHeight / 2) + this.waitY;
+            this.cameraOffsetX = (this.target.x + (this.target.width / 2) - (this.cWidth / 2)) ;
+            this.cameraOffsetY = (this.target.y + (this.target.height / 2) - (this.cHeight / 2)) ;
         }
     }
 
@@ -1037,7 +1037,6 @@ class TileMap {
 
     loadMapData(mapArray) {// mapArray must be a 2-dimensional Array
         this.mapData = new Array();
-
         for (let i = 0; i < mapArray.length; i++) {
             this.mapData.push(new Array());
             let temp = new Array();
