@@ -430,7 +430,7 @@ class Sprite {
 
 class Scene {
     //Scene that encapsulates the animation background
-    constructor(width=800,height=600,x=10,y=10,color="lightgray"){
+    constructor(width=window.innerWidth,height=window.innerHeight,x=0,y=0,color="lightgray"){
         //determine if it's a touchscreen device
         this.touchable = 'createTouch' in document;
         //dynamically create a canvas element
@@ -1210,11 +1210,13 @@ function _Graphics(curTime) {//Dynamic frame clock
     graphicsupdate(elapstedtime);// request user to update the canvas acording to time passed.
 
     // debugger for displaying frames per second and seconds per frame.
-    fps++;
-    if (Math.round(curTime / 1000) > prevsec) {
-        prevsec = Math.round(curTime / 1000);
-        document.getElementById("debugger").innerHTML = `<div>playtime: ${Math.round(curTime / 1000)}</div><div> FPS ${fps}</div>`;
-        fps = 0;
+    if(DEBUG){
+        fps++;
+        if (Math.round(curTime / 1000) > prevsec) {
+            prevsec = Math.round(curTime / 1000);
+            document.getElementById("debugger").innerHTML = `<div>playtime: ${Math.round(curTime / 1000)}</div><div> FPS ${fps}</div>`;
+            fps = 0;
+        }
     }
 }
 
