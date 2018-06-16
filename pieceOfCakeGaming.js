@@ -1016,9 +1016,11 @@ class TileMap {
         this.sheetWidth = 0;
         this.sheetHeight = 0;
         this.camera = new Camera(scene);
+        
     }
     loadTileSheet(tileWidth, tileHeight, sheetWidth, sheetHeight, tileSheetin, tileSymbols) {
         this.tileSheet = new Image();
+        this.tileSheet.onload = function () {tilemap.makeMap();}
         this.tileSheet.src = tileSheetin;
         this.tileWidth = tileWidth;
         this.tileHeight = tileHeight;
@@ -1051,30 +1053,27 @@ class TileMap {
             }
             this.tiles.push(temp)
         }
+        
     }
 
-    drawMap() {//this could be WAY faster
-        this.camera.update();
-        let ctx = this.camera.context;
-        let ilength = this.mapData.length;//faster for now condsidering using reversed for loop instead
-        for (let i = 0; i < ilength; i++) {//for each row
-            let jlength = this.mapData[i].length//faster for now condsidering using reversed for loop instead
-            for (let j = 0; j < jlength; j++) { //for each column of each row
-                let drawX = Math.round(this.tiles[i][j].x - this.camera.cameraOffsetX);
-                let drawY = Math.round(this.tiles[i][j].y - this.camera.cameraOffsetY);
-                if (0 < drawX < this.camera.cWidth && 0 < drawY < this.camera.cHeight) {//don't draw any tiles that will not be in the camera's view
-                    ctx.save();
-                    let sheetX = this.symbolImageMap[this.mapData[i][j]][0];
-                    let sheetY = this.symbolImageMap[this.mapData[i][j]][1];
-                    ctx.translate(drawX, drawY);
-                    if (this.tiles[i][j].animationPlaying) { this.drawTileAnimation(this.tiles[i][j], ctx); }
-                    else {
-                        ctx.drawImage(this.tileSheet, sheetX, sheetY, this.tileWidth, this.tileHeight, 0, 0, this.tileWidth, this.tileHeight);
-                        ctx.restore();
-                    }
-                }
+    makeMap() {
+        this.virtcanvas = document.createElement("canvas");
+        this.virtctx = this.virtcanvas.getContext("2d");
+        this.ilength = this.mapData.length;
+        this.jlength = this.mapData[1].length;
+        loaded();
+    }
+
+    drawMap() {
+        this.virtcanvas.width = this.ilength*64;
+        this.virtcanvas.height = this.jlength*64;
+        for (let i = 0; i < this.ilength; i++) {//for each row
+            for (let j = 0; j < this.jlength; j++) { //for each column of each row
+                this.virtctx.drawImage(this.tileSheet, this.symbolImageMap[this.mapData[i][j]][0], this.symbolImageMap[this.mapData[i][j]][1], 64, 64, j*64, i*64, 64, 64);
             }
         }
+        this.camera.update();
+        this.camera.context.drawImage(this.virtcanvas,-this.camera.cameraOffsetX,-this.camera.cameraOffsetY);
     }
 
     addTileCollision(collisionCallback, typeOrX, y) {// accept tile type or coordinates
