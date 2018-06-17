@@ -32,7 +32,7 @@ class Boat extends Sprite {
 
 function init() {
     game = new Scene();
-    game.setBG("#333399");
+    game.setBG("#ffffff");
     tilemap = new TileMap(game);
     let tileSymbols = [];
     for(let i = 0; i<256;i++ ){tileSymbols.push(i)}
@@ -43,7 +43,36 @@ function init() {
     tilemap.cameraFollowSprite(boat,0,0);
 
     if(DEBUG){
-        var gui = new dat.GUI();
+        var gui = new dat.GUI({ load: {
+            "remembered": {
+              "Default": {
+                "0": {
+                  "linearpower": 0.15,
+                  "rotationpower": 0.007,
+                  "lineardrag": 0.04,
+                  "rotationdrag": 0.08
+                }
+              },
+              "Laurence": {
+                "0": {
+                  "linearpower": 0.2,
+                  "rotationpower": 0.0043,
+                  "lineardrag": 0.056,
+                  "rotationdrag": 0.3
+                }
+              }
+            },
+            "preset": "Default",
+            "closed": false,
+            "folders": {
+              "Ship": {
+                "preset": "Default",
+                "closed": false,
+                "folders": {}
+              }
+            }
+          } });
+        gui.remember(boat);
         var shipfolder = gui.addFolder('Ship');
         shipfolder.add(boat, 'linearpower', 0, 0.5);
         shipfolder.add(boat, 'rotationpower', 0, 0.03);
