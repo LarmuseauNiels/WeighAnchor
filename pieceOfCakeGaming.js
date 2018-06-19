@@ -45,7 +45,7 @@ var virtKeys = false;
 
 class Sprite {
     //core class for game engine
-    constructor(scene, imageFile, width, height, x = 400,y=300) {
+    constructor(scene, imageFile, width, height, x = 400,y=400) {
         this.scene = scene;
         this.canvas = scene.canvas;
         this.context = this.canvas.getContext("2d");
@@ -942,8 +942,8 @@ class Camera {
         this.focalPointX =  this.cameraOffsetX + this.cWidth / 2;
         this.focalPointY =  this.cameraOffsetY + this.cHeight / 2;
         if (this.target && !this.checkFocusBounds()) {
-            this.cameraOffsetX = (this.target.x + (this.target.width / 2) - (this.cWidth / 2)) ;
-            this.cameraOffsetY = (this.target.y + (this.target.height / 2) - (this.cHeight / 2)) ;
+            this.cameraOffsetX = (this.target.x  - (this.cWidth / 2)) ;//+ (this.target.width / 2)
+            this.cameraOffsetY = (this.target.y  - (this.cHeight / 2)) ;//+ ((this.target.height / 2)*0)
         }
     }
 
@@ -1078,8 +1078,8 @@ class TileMap {
 
     addTileCollision(collisionCallback, typeOrX, y) {// accept tile type or coordinates
         if (typeof y == "undefined") { // then the first argument is a tile type
-            for (i = 0; i < this.tiles.length; i++) {
-                for (j = 0; j < this.tiles[i].length; j++) {
+            for (let i = 0; i < this.tiles.length; i++) {
+                for (let j = 0; j < this.tiles[i].length; j++) {
                     if (this.tiles[i][j].type == typeOrX) {
                         this.tiles[i][j].setCollision(collisionCallback);
                     }//end if
@@ -1169,8 +1169,8 @@ class TileMap {
             if (tileCoordX == (this.mapData[tileCoordY].length - 1)) { checkRowsEnd = this.mapData.length; }
             if (tileCoordY == 0) { checkColsBegin = 0; }
             if (tileCoordY == (this.mapData.length - 1)) { checkColsBegin = this.mapData[tileCoordY].length; }
-            for (i = checkColsBegin; i < checkColsEnd; i++) {
-                for (j = checkRowsBegin; j < checkRowsEnd; j++) {
+            for (let i = checkColsBegin; i < checkColsEnd; i++) {
+                for (let j = checkRowsBegin; j < checkRowsEnd; j++) {
                     if (this.tiles[i][j].isCollidable) {
                         this.tiles[i][j].checkCollision(sprite, this.tileWidth, this.tileHeight);
                     }
