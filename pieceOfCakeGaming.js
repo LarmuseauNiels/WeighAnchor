@@ -1070,8 +1070,10 @@ class TileMap {
         for (let i = 0; i < this.ilength; i++) {//for each row
             for (let j = 0; j < this.jlength; j++) { //for each column of each row
                 this.virtctx.drawImage(this.tileSheet, this.symbolImageMap[this.mapData[i][j]][0], this.symbolImageMap[this.mapData[i][j]][1], 64, 64, j*64, i*64, 64, 64);
+
             }
         }
+        //this.virtctx.fillRect(512, 320, 64, 64);
         this.camera.update();
         this.camera.context.drawImage(this.virtcanvas,-this.camera.cameraOffsetX,-this.camera.cameraOffsetY);
     }

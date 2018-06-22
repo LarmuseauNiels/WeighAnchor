@@ -26,12 +26,18 @@ class Boat extends Sprite {
         ctx.rotate(this._imgAngle);
         if (this.animation != false) { this.animation.drawFrame(ctx); }
         else {ctx.drawImage(this._image,0 - (this.width / 2),0 - (this.height / 2), this.width, this.height);}
+        
+
         ctx.restore();
     } 
+    stop(){
+        this.speed = -this.speed;
+    }
 }
 
 function hitshore(tilehit){
     console.log(tilehit);
+    boat.stop();
 }
 
 function init() {
@@ -67,6 +73,7 @@ function graphicsupdate(etime) {
     game.clear();
     tilemap.drawMap();
     boat.update(etime);
+
 }
 
 function physicsupdate() {
