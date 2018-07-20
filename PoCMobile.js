@@ -15,8 +15,8 @@ class Joy {
         this._diffX = 0;
         this._diffY = 0;
         this.touches = [];
-        this.startX;
-        this.startY;
+        this.startX = null;
+        this.startY = null;
         //add event handlers if appropriate
         touchable = 'createTouch' in document;
         if (touchable) {
@@ -40,7 +40,7 @@ class Joy {
     } 
 
     onTouchMove(event) {
-        let result = "move: "
+        let result = "move: ";
         event.preventDefault();
         this.touches = event.touches;
         //map touch position to mouse position

@@ -99,10 +99,10 @@ class Tile {
 class TileMap {
     constructor(scene){
         this.tileSheet = new Image();
-        this.tiles = new Array();
+        this.tiles = [];
         this.symbolImageMap = [];
-        this.tileAnimations = new Array();
-        this.specificTileAnimations = new Array();
+        this.tileAnimations = [];
+        this.specificTileAnimations = [];
         this.mapData = false;
         this.tileWidth = 0;
         this.tileHeight = 0;
@@ -113,7 +113,7 @@ class TileMap {
     }
     loadTileSheet(tileWidth, tileHeight, sheetWidth, sheetHeight, tileSheetin, tileSymbols) {
         this.tileSheet = new Image();
-        this.tileSheet.onload = function () {tilemap.makeMap();}
+        this.tileSheet.onload = function () {tilemap.makeMap();};
         this.tileSheet.src = tileSheetin;
         this.tileWidth = tileWidth;
         this.tileHeight = tileHeight;
@@ -131,10 +131,10 @@ class TileMap {
     }
 
     loadMapData(mapArray) {// mapArray must be a 2-dimensional Array
-        this.mapData = new Array();
+        this.mapData = [];
         for (let i = 0; i < mapArray.length; i++) {
-            this.mapData.push(new Array());
-            let temp = new Array();
+            this.mapData.push([]);
+            let temp = [];
             for (let j = 0; j < mapArray[i].length; j++) {
                 let k = 0;
                 let notConverted = true;
@@ -144,7 +144,7 @@ class TileMap {
                 }
                 temp[j] = new Tile(j, i, j * this.tileWidth, i * this.tileHeight, k);// k = tile type
             }
-            this.tiles.push(temp)
+            this.tiles.push(temp);
         }
         
     }
@@ -224,7 +224,7 @@ class TileMap {
         let animation = new Animation(animSheet, imgWidth, imgHeight, cellWidth, cellHeight);
         animation.setup();
         for (let i = 0; i < this.symbolImageMap.length; i++) { // find the tile number that corresponds to the tile name.
-            if (this.symbolImageMap[i][2] = tileName) {
+            if (this.symbolImageMap[i][2] == tileName) {
                 this.tileAnimations[i] = animation;// i = tileNumber, animation
             }
         }
