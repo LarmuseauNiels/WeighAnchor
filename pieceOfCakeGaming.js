@@ -1,5 +1,5 @@
-(function () {
-  'use strict';
+//(function () {
+//  'use strict';
 
   /* pieceOfCakeGaming.js
      a very basic game library for the canvas tag
@@ -980,4 +980,4 @@
   function _Pysics() { //stable physics and control loop runs based on tick time.
     physicsupdate(); // request user to handel physics and controls
   }
-}());
+//}());
