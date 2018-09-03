@@ -1,6 +1,6 @@
 /*
-Piece Of Cake Gaming tiles module!
-
+Piece Of Cake Gaming Client tiles module!
+Author: Niels Larmuseau
 */
 class Camera {
   constructor(scene) {
