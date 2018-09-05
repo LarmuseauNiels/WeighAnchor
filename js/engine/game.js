@@ -87,7 +87,6 @@ function init() {
   tilemap.addTileCollision(hitshore, 2);
   boat.boundAction = CONTINUE;
   tilemap.cameraFollowSprite(boat, 0, 0);
-
   if (DEBUG) {
     var gui = new dat.GUI({
       load: {
@@ -138,7 +137,6 @@ function graphicsupdate(etime) {
   game.clear();
   tilemap.drawMap();
   boat.update(etime);
-
 }
 
 function physicsupdate() {

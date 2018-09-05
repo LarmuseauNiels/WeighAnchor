@@ -31,8 +31,6 @@ class Boat extends Sprite {
       } else {
         ctx.drawImage(this._image, 0 - (this.width / 2), 0 - (this.height / 2), this.width, this.height);
       }
-  
-  
       ctx.restore();
     }
     stop() {
