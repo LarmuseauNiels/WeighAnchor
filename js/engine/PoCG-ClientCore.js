@@ -65,7 +65,7 @@ class Sprite {
     this._moveAngleSpeed = 0;
     this.camera = false;
     this.visible = true;
-    this._boundAction = STOP;
+    this._boundAction = CONTINUE;
   }
   //GETTERS AND SETTERS
   set image(imgFile) {

@@ -2,6 +2,12 @@ var game;
 var boat;
 var camera;
 var tilemap;
+var collor = {
+  'red': 0,
+  'green': 0,
+  'blue': 0,
+  'trans': 0.5,
+};
 
 function hitshore(tilehit) {
   console.log(tilehit);
@@ -84,9 +90,9 @@ function init() {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   ]);
   boat = new Boat(0.15, 0.007, 0.04, 0.08);
-  tilemap.addTileCollision(hitshore, 2);
-  boat.boundAction = CONTINUE;
-  tilemap.cameraFollowSprite(boat, 0, 0);
+  //tilemap.addTileCollision(hitshore, 2);
+  //boat.boundAction = CONTINUE;
+  tilemap.cameraFollowSprite(boat, 0, 0);// camera flow sprite
   if (DEBUG) {
     var gui = new dat.GUI({
       load: {
@@ -126,6 +132,12 @@ function init() {
     shipfolder.add(boat, 'lineardrag', 0, 0.3);
     shipfolder.add(boat, 'rotationdrag', 0, 0.3);
     shipfolder.open();
+    var nightfolder = gui.addFolder('Lighting');
+    nightfolder.add(collor, 'red', 0, 255);
+    nightfolder.add(collor, 'green', 0, 255);
+    nightfolder.add(collor, 'blue', 0, 255);
+    nightfolder.add(collor, 'trans', 0, 1);
+
   }
 }
 
@@ -137,6 +149,11 @@ function graphicsupdate(etime) {
   game.clear();
   tilemap.drawMap();
   boat.update(etime);
+
+
+  let context = game.canvas.getContext("2d");
+  context.fillStyle = "rgba("+collor.red+", "+collor.green+", "+collor.blue+", "+collor.trans+")";
+  context.fillRect(0, 0, game.canvas.width, game.canvas.height);
 }
 
 function physicsupdate() {
