@@ -1,23 +1,23 @@
 var game;
-var boat;
 var camera;
 var tilemap;
+var socket;
+var serveraddress = 'ws://localhost:6440';
 var collor = {
   'red': 0,
   'green': 0,
   'blue': 0,
-  'trans': 0.5,
+  'trans': 0.5
 };
+var playerid;
+var playermap;
 
-function hitshore(tilehit) {
-  console.log(tilehit);
-  boat.stop();
-}
 
 function init() {
   game = new Scene();
   game.setBG("#ffffff");
   tilemap = new TileMap(game);
+  playermap = new Map();
   let tileSymbols = [];
   for (let i = 0; i < 256; i++) {
     tileSymbols.push(i);
@@ -89,10 +89,6 @@ function init() {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   ]);
-  boat = new Boat(0.15, 0.007, 0.04, 0.08);
-  //tilemap.addTileCollision(hitshore, 2);
-  //boat.boundAction = CONTINUE;
-  tilemap.cameraFollowSprite(boat, 0, 0);// camera flow sprite
   if (DEBUG) {
     var gui = new dat.GUI({
       load: {
@@ -125,13 +121,14 @@ function init() {
         }
       }
     });
+    /*
     gui.remember(boat);
     var shipfolder = gui.addFolder('Ship');
     shipfolder.add(boat, 'linearpower', 0, 0.5);
     shipfolder.add(boat, 'rotationpower', 0, 0.03);
     shipfolder.add(boat, 'lineardrag', 0, 0.3);
     shipfolder.add(boat, 'rotationdrag', 0, 0.3);
-    shipfolder.open();
+    shipfolder.open();*/
     var nightfolder = gui.addFolder('Lighting');
     nightfolder.add(collor, 'red', 0, 255);
     nightfolder.add(collor, 'green', 0, 255);
@@ -142,25 +139,96 @@ function init() {
 }
 
 function loaded() {
+  socket = new WebSocket(serveraddress);
+  socket.onopen = function (event) {
+    socketEvents();
+    console.log("connected");
+    socket.send(JSON.stringify({
+      action: "join"
+    }));
+
+
+  };
+}
+
+function socketEvents() {
+  socket.onmessage = function (event) {
+    let msg = JSON.parse(event.data);
+    switch (msg.action) {
+      case "join":
+        connected(msg);
+        break;
+      case "sync":
+        sync(msg);
+        break;
+        //TODO implement more functions
+      default:
+        break;
+    }
+  };
+}
+
+function connected(data) {
+  playerid = data.player.id;
+  //TODO set map
   game.start();
+}
+
+function sync(data) {
+  let incommingplayers = new Map(data.region.playermap);
+  incommingplayers.forEach(function (player, id) {
+    if (playermap.has(id)) {
+      if(id == playerid){
+        //ignore?
+      }
+      else{
+        if(player.missedTicks == 0){
+          playermap.get(id).sync(player);
+        }
+      }
+    } else {
+      playermap.set(id, new Player(player));
+    }
+  });
+  playermap.forEach(function(player,id){
+    if (!incommingplayers.has(id)) {
+      playermap.delete(id);
+    }
+  });
 }
 
 function graphicsupdate(etime) {
   game.clear();
   tilemap.drawMap();
-  boat.update(etime);
+  //boat.update(etime);
 
+  playermap.forEach(function (player, id) {
+    player.boat.update(etime);
+  });
 
   let context = game.canvas.getContext("2d");
-  context.fillStyle = "rgba("+collor.red+", "+collor.green+", "+collor.blue+", "+collor.trans+")";
+  context.fillStyle = "rgba(" + collor.red + ", " + collor.green + ", " + collor.blue + ", " + collor.trans + ")";
   context.fillRect(0, 0, game.canvas.width, game.canvas.height);
 }
 
 function physicsupdate() {
-  boat.checkKeys();
-  boat.checkDrag();
-  tilemap.checkCollisions(boat);
-  if (DEBUG) shipdebugger(boat);
+  //tilemap.cameraFollowSprite(playermap.get(playerid).boat, 0, 0); // camera flow sprite
+
+  playermap.get(playerid).boat.checkKeys();
+  //playermap.get(playerid).boat.checkDrag();
+  playermap.forEach(function (player, id) {
+    player.boat.checkDrag();
+  });
+  moveSync();
+  //tilemap.checkCollisions(boat);
+  if (DEBUG) shipdebugger(playermap.get(playerid).boat);
+}
+
+function moveSync() {
+  socket.send(JSON.stringify({
+    action: "moveSync",
+    player: playermap.get(playerid)
+  }));
 }
 
 function shipdebugger(ship) {
