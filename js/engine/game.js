@@ -7,7 +7,7 @@ var collor = {
   'red': 0,
   'green': 0,
   'blue': 0,
-  'trans': 0.5
+  'trans': 0.0
 };
 var playerid;
 var playermap;
@@ -22,7 +22,9 @@ function init() {
   for (let i = 0; i < 256; i++) {
     tileSymbols.push(i);
   }
+  
   tilemap.loadTileSheet(64, 64, 1024, 1024, "tilesheet.png", tileSymbols);
+
   tilemap.loadMapData([
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -92,28 +94,10 @@ function init() {
   if (DEBUG) {
     var gui = new dat.GUI({
       load: {
-        "remembered": {
-          "Default": {
-            "0": {
-              "linearpower": 0.15,
-              "rotationpower": 0.007,
-              "lineardrag": 0.04,
-              "rotationdrag": 0.08
-            }
-          },
-          "Laurence": {
-            "0": {
-              "linearpower": 0.2,
-              "rotationpower": 0.0043,
-              "lineardrag": 0.056,
-              "rotationdrag": 0.3
-            }
-          }
-        },
         "preset": "Default",
         "closed": false,
         "folders": {
-          "Ship": {
+          "nightfolder": {
             "preset": "Default",
             "closed": false,
             "folders": {}
@@ -121,20 +105,11 @@ function init() {
         }
       }
     });
-    /*
-    gui.remember(boat);
-    var shipfolder = gui.addFolder('Ship');
-    shipfolder.add(boat, 'linearpower', 0, 0.5);
-    shipfolder.add(boat, 'rotationpower', 0, 0.03);
-    shipfolder.add(boat, 'lineardrag', 0, 0.3);
-    shipfolder.add(boat, 'rotationdrag', 0, 0.3);
-    shipfolder.open();*/
     var nightfolder = gui.addFolder('Lighting');
     nightfolder.add(collor, 'red', 0, 255);
     nightfolder.add(collor, 'green', 0, 255);
     nightfolder.add(collor, 'blue', 0, 255);
     nightfolder.add(collor, 'trans', 0, 1);
-
   }
 }
 
@@ -146,8 +121,6 @@ function loaded() {
     socket.send(JSON.stringify({
       action: "join"
     }));
-
-
   };
 }
 
@@ -171,6 +144,9 @@ function socketEvents() {
 function connected(data) {
   playerid = data.player.id;
   //TODO set map
+  //tilemap.loadMapData(data.map);
+  
+
   game.start();
 }
 
@@ -200,27 +176,21 @@ function sync(data) {
 function graphicsupdate(etime) {
   game.clear();
   tilemap.drawMap();
-  //boat.update(etime);
-
   playermap.forEach(function (player, id) {
     player.boat.update(etime);
   });
-
   let context = game.canvas.getContext("2d");
   context.fillStyle = "rgba(" + collor.red + ", " + collor.green + ", " + collor.blue + ", " + collor.trans + ")";
   context.fillRect(0, 0, game.canvas.width, game.canvas.height);
 }
 
 function physicsupdate() {
-  //tilemap.cameraFollowSprite(playermap.get(playerid).boat, 0, 0); // camera flow sprite
-
   playermap.get(playerid).boat.checkKeys();
-  //playermap.get(playerid).boat.checkDrag();
   playermap.forEach(function (player, id) {
     player.boat.checkDrag();
   });
+  //tilemap.checkCollisions(boat);//checkcollision
   moveSync();
-  //tilemap.checkCollisions(boat);
   if (DEBUG) shipdebugger(playermap.get(playerid).boat);
 }
 
