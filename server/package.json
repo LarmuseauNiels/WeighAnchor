@@ -1,0 +1,31 @@
+{
+  "name": "pirate-server",
+  "version": "1.0.0",
+  "description": "pirate server",
+  "main": "index.js",
+  "dependencies": {
+    "shortid": "^2.2.13",
+    "ws": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^10.5.2",
+    "nodemon": "^1.18.3",
+    "ts-node": "^7.0.0",
+    "typescript": "^2.9.2"
+  },
+  "scripts": {
+    "start": "npm run build:live",
+    "build:live": "nodemon ./index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/thelegion/pirate-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/thelegion/pirate-server/issues"
+  },
+  "homepage": "https://gitlab.com/thelegion/pirate-server#README"
+}

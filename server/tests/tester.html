@@ -1,0 +1,93 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>QUnit Pirate game server tests</title>
+    <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.22.0.css">
+    <script src="https://code.jquery.com/qunit/qunit-1.22.0.js"></script>
+</head>
+
+<body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <script>
+        var socket = new WebSocket('ws://localhost:6440');
+        var player;
+        QUnit.test("Test Connection T001", function (assert) {
+            var start;
+            assert.expect(2);
+            var done = assert.async();
+            setTimeout(function () {
+                assert.ok(socket.readyState == 1, "Connected within 200ms.");
+                if (socket.readyState == 1) {
+                    let json = JSON.stringify({
+                        action: "ping"
+                    });
+                    socket.send(json);
+                    start = new Date();
+                }
+            }, 200);
+            socket.onmessage = function (event) {
+                let json = JSON.parse(event.data)
+                if (json.action == "ping") {
+                    assert.ok(json.action == "ping", "ping of: " + ((new Date()) - start));
+                    done();
+                }
+            };
+        });
+        QUnit.test("Join test T002", function (assert) {
+            var t1;
+            assert.expect(1);
+            var done = assert.async();
+            setTimeout(function () {
+                if (socket.readyState == 1) {
+                    let json = JSON.stringify({
+                        action: "join"
+                    });
+                    socket.send(json);
+                    t1 = new Date();
+                }
+            }, 250);
+            socket.onmessage = function (event) {
+                let json = JSON.parse(event.data)
+                if (json.action == "join") {
+                    assert.ok(true, "join recieved in: " + ((new Date()) - t1) + "ms, obj: " + event.data);
+                    player = json.player;
+                    done();
+                }
+                //TODO test aspects of join data
+            };
+        });
+        QUnit.test("Move test T003", function (assert) {
+            assert.expect(1);
+            var t1;
+            var done = assert.async();
+            var checking = true;
+            setTimeout(function () {
+                if (socket.readyState == 1) {
+                    player.boat._x = 194;
+                    let json = JSON.stringify({
+                        action: "moveSync",
+                        player: player
+                    });
+                    socket.send(json);
+                    t1 = new Date();
+                    socket.onmessage = function (event) {
+                        let json = JSON.parse(event.data)
+                        if (json.action == "sync" && checking) {
+                            json.region.playermap = new Map(json.region.playermap);
+                            if (json.region.playermap.get(player.id).boat._x == 194) {
+                                assert.ok(true, "boat moved in " + ((new Date()) - t1) +
+                                    "ms data: " + event.data);
+                                checking = false;
+                                done();
+                            }
+                        }
+                    };
+                }
+            }, 350);
+        });
+    </script>
+</body>
+
+</html>
