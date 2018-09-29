@@ -514,7 +514,7 @@ class Scene {
     this.setSize(width, height);
     this.setPos(x, y);
     this.canvas.style.backgroundColor = color;
-    this.physicsticktime = 20; // time between physics and control ticks, standart 50 for 20tps
+    this.physicsticktime = 10; // time between physics and control ticks, standart 50 for 20tps
   }
   clear() {
     this.context.clearRect(0, 0, this.width, this.height);

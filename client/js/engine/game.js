@@ -174,12 +174,15 @@ function sync(data) {
 }
 
 function graphicsupdate(etime) {
+  
   game.clear();
+  let context = game.canvas.getContext("2d");
+  context.globalCompositeOperation = "source-over";
   tilemap.drawMap();
   playermap.forEach(function (player, id) {
     player.boat.update(etime);
   });
-  let context = game.canvas.getContext("2d");
+  context.globalCompositeOperation = "multiply";
   context.fillStyle = "rgba(" + collor.red + ", " + collor.green + ", " + collor.blue + ", " + collor.trans + ")";
   context.fillRect(0, 0, game.canvas.width, game.canvas.height);
 }

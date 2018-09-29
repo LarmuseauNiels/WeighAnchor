@@ -1,6 +1,6 @@
 const classes = require("./js/serverClasses");
 const port = Number(process.env.PORT || 6440);
-const ticktime = 20;
+const ticktime = 10;
 const WebSocket = require("ws");
 const wss = new WebSocket.Server({
   port: port
