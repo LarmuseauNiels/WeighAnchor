@@ -19,7 +19,7 @@ function loop(){
     })
   );
   region.playermap.forEach(function(player,id){
-    if(player.missedTicks > 100){
+    if(player.missedTicks > 500){
       region.playermap.delete(id);
     }
     else{

@@ -2,7 +2,7 @@ var game;
 var camera;
 var tilemap;
 var socket;
-var serveraddress = 'ws://localhost:6440';
+var serveraddress = 'ws://51.38.115.47:6440';
 var collor = {
   'red': 0,
   'green': 0,
