@@ -1,6 +1,7 @@
 # Weigh Angor
 
-MMORPG Pirate webgame
+
+Pirate webgame
 
 
 ## Ship
