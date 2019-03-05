@@ -310,11 +310,11 @@ class Sprite {
 
     ctx.save();
     //The following lines are for Tyler's code. Removed for now
-    //if( this.camera ){ ctx.translate(this.x - this.camera.cameraOffsetX, this.y - this.camera.cameraOffsetY); }
-    //else{ ctx.translate(this.x, this.y); }
+    if( this.camera ){ ctx.translate(this.x - this.camera.cameraOffsetX, this.y - this.camera.cameraOffsetY); }
+    else{ ctx.translate(this.x, this.y); }
 
     //transform element
-    ctx.translate(this.x, this.y);
+    //ctx.translate(this.x, this.y);
     ctx.rotate(this._imgAngle);
 
     //draw image with center on origin

@@ -17,17 +17,22 @@ class Camera {
     this.focalPointY = 0;
   }
 
-  moveCamera(x, y) {
+  centerOn(x,y){
+    this.cameraOffsetX = (x - (this.cWidth / 2)); //+ (this.target.width / 2)
+    this.cameraOffsetY = (y - (this.cHeight / 2)); 
+  }
+
+  moveBy(x, y) {
     this.cameraOffsetX += x;
     this.cameraOffsetY += y;
   }
 
   followSprite(sprite) { // wait rectangle currently not working
     this.target = sprite;
-    if (typeof waitX != "undefined") {
-      this.waitX = waitX;
-      this.waitY = waitY;
-    }
+    // if (typeof waitX != "undefined") {
+    //   this.waitX = waitX;
+    //   this.waitY = waitY;
+    // }
   }
 
   update() {
@@ -164,10 +169,11 @@ class TileMap {
     this.virtctx = this.virtcanvas.getContext("2d");
     this.ilength = this.mapData.length;
     this.jlength = this.mapData[1].length;
+    this.renderVirtCtx();
     loaded();
   }
 
-  drawMap() {
+  renderVirtCtx(){
     this.virtcanvas.width = this.ilength * 64;
     this.virtcanvas.height = this.jlength * 64;
     for (let i = 0; i < this.ilength; i++) { //for each row
@@ -175,6 +181,10 @@ class TileMap {
         this.virtctx.drawImage(this.tileSheet, this.symbolImageMap[this.mapData[i][j]][0], this.symbolImageMap[this.mapData[i][j]][1], 64, 64, j * 64, i * 64, 64, 64);
       }
     }
+  }
+
+  drawMap() {
+    
     //this.virtctx.fillRect(512, 320, 64, 64);
     this.camera.update();
     this.camera.context.drawImage(this.virtcanvas, -this.camera.cameraOffsetX, -this.camera.cameraOffsetY);
