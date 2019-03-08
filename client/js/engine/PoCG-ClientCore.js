@@ -310,11 +310,11 @@ class Sprite {
 
     ctx.save();
     //The following lines are for Tyler's code. Removed for now
-    //if( this.camera ){ ctx.translate(this.x - this.camera.cameraOffsetX, this.y - this.camera.cameraOffsetY); }
-    //else{ ctx.translate(this.x, this.y); }
+    if( this.camera ){ ctx.translate(this.x - this.camera.cameraOffsetX, this.y - this.camera.cameraOffsetY); }
+    else{ ctx.translate(this.x, this.y); }
 
     //transform element
-    ctx.translate(this.x, this.y);
+    //ctx.translate(this.x, this.y);
     ctx.rotate(this._imgAngle);
 
     //draw image with center on origin
@@ -514,7 +514,7 @@ class Scene {
     this.setSize(width, height);
     this.setPos(x, y);
     this.canvas.style.backgroundColor = color;
-    this.physicsticktime = 10; // time between physics and control ticks, standart 50 for 20tps
+    this.physicsticktime = 25; // time between physics and control ticks, standart 50 for 20tps
   }
   clear() {
     this.context.clearRect(0, 0, this.width, this.height);

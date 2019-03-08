@@ -18,6 +18,7 @@ class Boat extends Sprite {
     this.linearpower = linearpower;
     this.lineardrag = lineardrag;
     this.rotationdrag = rotationdrag;
+    super.setCameraRelative(tilemap.camera);
   }
   sync(boat){
     super.width = boat.width;

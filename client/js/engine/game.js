@@ -1,8 +1,7 @@
 var game;
-var camera;
 var tilemap;
 var socket;
-var serveraddress = 'ws://51.38.115.47:6440';
+var serveraddress = 'ws://localhost:6440';
 var collor = {
   'red': 0,
   'green': 0,
@@ -178,21 +177,25 @@ function graphicsupdate(etime) {
   game.clear();
   let context = game.canvas.getContext("2d");
   context.globalCompositeOperation = "source-over";
+  tilemap.camera.centerOn(playermap.get(playerid).boat.x,playermap.get(playerid).boat.y); //FIXME: temporary ship following
   tilemap.drawMap();
   playermap.forEach(function (player, id) {
     player.boat.update(etime);
   });
+  /* 
   context.globalCompositeOperation = "multiply";
   context.fillStyle = "rgba(" + collor.red + ", " + collor.green + ", " + collor.blue + ", " + collor.trans + ")";
   context.fillRect(0, 0, game.canvas.width, game.canvas.height);
-}
+  */
+} 
 
 function physicsupdate() {
   playermap.get(playerid).boat.checkKeys();
+  //tilemap.camera.followSprite(playermap.get(playerid).boat); //FIXME: causes ISSUES
   playermap.forEach(function (player, id) {
     player.boat.checkDrag();
   });
-  //tilemap.checkCollisions(boat);//checkcollision
+  //tilemap.checkCollisions(playermap.get(playerid).boat);//checkcollision //FIXME: broken collision boxes
   moveSync();
   if (DEBUG) shipdebugger(playermap.get(playerid).boat);
 }
