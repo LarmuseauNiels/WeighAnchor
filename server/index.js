@@ -1,6 +1,6 @@
 const classes = require("./js/serverClasses");
 const port = Number(process.env.PORT || 6440);
-const ticktime = 10;
+const ticktime = 25;
 const WebSocket = require("ws");
 const wss = new WebSocket.Server({
   port: port
@@ -19,7 +19,7 @@ function loop(){
     })
   );
   region.playermap.forEach(function(player,id){
-    if(player.missedTicks > 500){
+    if(player.missedTicks > 50){
       region.playermap.delete(id);
     }
     else{
