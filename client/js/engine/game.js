@@ -195,7 +195,7 @@ function physicsupdate() {
   playermap.forEach(function (player, id) {
     player.boat.checkDrag();
   });
-  //tilemap.checkCollisions(playermap.get(playerid).boat);//checkcollision //FIXME: broken collision boxes
+  tilemap.checkCollisions(playermap.get(playerid).boat);//checkcollision //FIXME: broken collision boxes
   moveSync();
   if (DEBUG) shipdebugger(playermap.get(playerid).boat);
 }

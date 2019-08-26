@@ -1,5 +1,5 @@
 /*
-Piece Of Cake Gaming Client tiles module!
+Piece Of Cake Gaming Client tiles module
 Author: Niels Larmuseau
 */
 class Camera {
@@ -119,6 +119,7 @@ class TileMap {
     this.sheetWidth = 0;
     this.sheetHeight = 0;
     this.camera = new Camera(scene);
+    
 
   }
   loadTileSheet(tileWidth, tileHeight, sheetWidth, sheetHeight, tileSheetin, tileSymbols) {
@@ -178,7 +179,15 @@ class TileMap {
     this.virtcanvas.height = this.jlength * 64;
     for (let i = 0; i < this.ilength; i++) { //for each row
       for (let j = 0; j < this.jlength; j++) { //for each column of each row
+
         this.virtctx.drawImage(this.tileSheet, this.symbolImageMap[this.mapData[i][j]][0], this.symbolImageMap[this.mapData[i][j]][1], 64, 64, j * 64, i * 64, 64, 64);
+        // if(this.mapData[i][j] != 0 && true){
+        //   this.virtctx.beginPath();
+        //   this.virtctx.lineWidth = "2";
+        //   this.virtctx.strokeStyle = "red";
+        //   this.virtctx.rect(j * 64, i * 64, 64, 64);
+        //   this.virtctx.stroke();
+        // }
       }
     }
   }
@@ -282,6 +291,16 @@ class TileMap {
   checkCollisions(sprite) { //check for collisions between sprite and tile
     let tileCoordX = Math.floor(sprite.x / this.tileWidth);
     let tileCoordY = Math.floor(sprite.y / this.tileHeight);
+    
+    //console.log(tileCoordX + " "  + tileCoordY);
+    if(this.mapData[tileCoordY][tileCoordX] != 0){
+      //console.log("hit");
+      //TODO: use callbacks
+      sprite.stop();
+      
+      //this.tiles[tileCoordX][tileCoordY].checkCollision(sprite, this.tileWidth, this.tileHeight);
+    }
+    /*
     let checkRowsBegin = tileCoordX - 1;
     let checkRowsEnd = tileCoordX + 2;
     let checkColsBegin = tileCoordY - 1;
@@ -306,7 +325,7 @@ class TileMap {
           }
         }
       }
-    }
+    }*/
   }
 
   makeSpriteMapRelative(sprite) {

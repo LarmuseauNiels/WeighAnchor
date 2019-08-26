@@ -1,5 +1,5 @@
 /*
-Piece Of Cake Gaming Client Mobile Module!
+Piece Of Cake Gaming Client Mobile Module
 Author: Niels Larmuseau
 */
 
