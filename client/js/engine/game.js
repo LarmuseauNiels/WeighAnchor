@@ -21,6 +21,7 @@ function init() {
   for (let i = 0; i < 256; i++) {
     tileSymbols.push(i);
   }
+  CannonBalls = [];
   
   tilemap.loadTileSheet(64, 64, 1024, 1024, "tilesheet.png", tileSymbols);
 
@@ -182,6 +183,9 @@ function graphicsupdate(etime) {
   playermap.forEach(function (player, id) {
     player.boat.update(etime);
   });
+  CannonBalls.forEach(function (cannonball){
+    cannonball.update(etime);
+  });
   /* 
   context.globalCompositeOperation = "multiply";
   context.fillStyle = "rgba(" + collor.red + ", " + collor.green + ", " + collor.blue + ", " + collor.trans + ")";
@@ -195,6 +199,9 @@ function physicsupdate() {
   playermap.forEach(function (player, id) {
     player.boat.checkDrag();
   });
+  CannonBalls.forEach(function (cannonball){
+    //cannonball.update();
+  })
   tilemap.checkCollisions(playermap.get(playerid).boat);//checkcollision //FIXME: broken collision boxes
   moveSync();
   if (DEBUG) shipdebugger(playermap.get(playerid).boat);

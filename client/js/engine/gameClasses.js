@@ -47,11 +47,18 @@ class Boat extends Sprite {
     if (keysDown[K_UP] || keysDown[K_Z]) {
       this.addVector(this.imgAngle, this.linearpower);
     }
+    if (keysDown[K_A] ) {
+      this.FireCannon();
+    }
     
   }
   checkDrag() {
     this.speed *= 1 - this.lineardrag;
     this.imgAngleSpeed *= 1 - this.rotationdrag;
+  }
+
+  FireCannon(){
+    
   }
   /*
   _draw() {
@@ -73,7 +80,7 @@ class Boat extends Sprite {
 
 class CannonBall extends Sprite{
   constructor(X,Y, fireAngle, ) {
-    super(game, "cannonBall.png", 100, 50);
+    super(game, "cannonBall.png", 10, 10);
     this.lineardrag = 0.02;
     super.x = X;
     super.y = Y;
