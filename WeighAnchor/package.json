@@ -1,0 +1,29 @@
+{
+  "name": "weigh-anchor",
+  "version": "0.1.1",
+  "description": "WeighAnchor",
+  "main": "server.js",
+  "dependencies": {
+    "shortid": "^2.2.13",
+    "ws": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^10.5.2",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.3",
+    "ts-node": "^7.0.0",
+    "typescript": "^2.9.2"
+  },
+  "scripts": {
+    "start": "npm run build:live",
+    "build:live": "nodemon ./index.js",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/thelegion/pirate-server.git"
+  },
+  "author": {
+    "name": ""
+  }
+}

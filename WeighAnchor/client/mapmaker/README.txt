@@ -1,0 +1,3 @@
+A Pen created at CodePen.io. You can find this one at https://codepen.io/niels2398/pen/OEXoNW.
+
+ Takes a source image, tile width and height and finds the individual unique tiles which make up the image as well as where they're placed on a grid, then renders the parsed tiles and positions back onto a canvas element. Also now allows editing of maps by selecting and 'painting' tiles onto the map. Map rectangle selection and pasting in progress.
