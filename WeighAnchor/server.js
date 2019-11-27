@@ -1,63 +1,19 @@
-const http = require('http');
 const WebSocket = require("ws");
-const fs = require("fs");
-const url = require('url');
-const path = require('path');
-const WebPort = process.env.PORT || 1337;
+
 const classes = require("./js/serverClasses");
+
+const WebPort = process.env.PORT || 1337;
 const WebSocketPort = Number(process.env.WSPORT || 6440);
 const ServerIP = process.env.SERVERIP || "localhost";
+
 const ticktime = 25;
 const wss = new WebSocket.Server({
     port: WebSocketPort
 });
-
 var region;
 
-// maps file extention to MIME types
-const mimeType = {
-    '.ico': 'image/x-icon',
-    '.html': 'text/html',
-    '.js': 'text/javascript',
-    '.json': 'application/json',
-    '.css': 'text/css',
-    '.png': 'image/png',
-    '.jpg': 'image/jpeg',
-    '.wav': 'audio/wav',
-    '.mp3': 'audio/mpeg',
-    '.svg': 'image/svg+xml',
-    '.pdf': 'application/pdf',
-    '.doc': 'application/msword',
-    '.eot': 'appliaction/vnd.ms-fontobject',
-    '.ttf': 'aplication/font-sfnt'
-};
+require("./js/webserver")(ServerIP, WebSocketPort, WebPort);
 
-http.createServer(function (req, res) {
-    let pathName = url.parse(req.url).pathname;
-    if (pathName === "/") {
-        pathName = "/index.html";
-    }
-    //if (fs.statSync(pathName).isDirectory()) {
-    //    pathName += '/index.html';
-    //}
-    fs.readFile("./client" + pathName,  function (error, data) {
-        if (error) {
-            res.writeHead(404);
-            //res.write(error);
-            res.end();
-        } else {
-            const ext = path.parse(pathName).ext;
-            res.writeHead(200, {
-                'Content-Type': mimeType[ext] || 'text/plain'
-            });
-            if (pathName === "/index.html" ) {
-                data = data.toString().replace("#ServerIP#", ServerIP).replace("#WebSocketPort#", WebSocketPort);
-            }
-            res.write(data);
-            res.end();
-        }
-    });
-}).listen(WebPort);
 
 function loop() {
     wss.broadcast(

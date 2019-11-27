@@ -60,6 +60,9 @@
     <Content Include="js\db.js" />
     <Content Include="js\engine.js" />
     <Content Include="js\serverClasses.js" />
+    <Content Include="js\webserver.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="server.js" />
     <Content Include="package.json" />
     <Content Include="README.md" />
