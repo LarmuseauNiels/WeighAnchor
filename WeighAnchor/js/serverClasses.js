@@ -6,11 +6,15 @@ class Region {
         this.playermap = playermap;
         this.ai = aimap;
         this.map = null;
+        this.CannonBalls = [];
     }
     join() {
         let p1 = new Player();
         this.playermap.set(p1.id, p1);
         return p1;
+    }
+    fire(obj) {
+        this.CannonBalls.push(obj.cannonball);
     }
     moveSync(obj) {
         let p1 = this.playermap.get(obj.id);

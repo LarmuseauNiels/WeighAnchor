@@ -71,7 +71,7 @@ function initConnection() {
                 region.moveSync(p2);
                 break;
             case "fire":
-                //TODO cannon ball
+                region.fire(msgobj);
                 break;
             default:
                 socket.send(
